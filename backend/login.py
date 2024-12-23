@@ -6,7 +6,6 @@ from backend.instances import User
 def login(email, password):
     hashed_password = hash_data(password)
     user = db_login(email, hashed_password)
-    print(user)
 
     if user is None:
         return 0
