@@ -29,8 +29,18 @@ def db_register(first_name, last_name, email, hashed_password):
 
     with db_connection.cursor() as cursor:
         cursor.execute(query, (first_name, last_name, email, hashed_password))
-        rows_affected = cursor.rowcount
+        user_id = cursor.fetchone()[0]
     db_connection.commit()
     db_connection.close()
-    return rows_affected
+    return user_id
+
+
+def db_insert_action_log(user_id, action_details):
+    db_connection = get_db_connection()
+    query = QUERIES['insert_action_log']
+
+    with db_connection.cursor() as cursor:
+        cursor.execute(query, (user_id, action_details))
+    db_connection.commit()
+    db_connection.close()
 
