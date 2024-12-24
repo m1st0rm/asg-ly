@@ -10,7 +10,7 @@ def set_register_button_state(entry_first_name, entry_last_name, entry_email, en
         register_button.config(state=tk.DISABLED)
 
 
-def register_command(entry_first_name, entry_last_name, entry_email, entry_password, entry_confirm_password):
+def register_command(entry_first_name, entry_last_name, entry_email, entry_password, entry_confirm_password, close_register_window_method):
     email = entry_email.get()
 
     if not validate_email(email):
@@ -35,6 +35,7 @@ def register_command(entry_first_name, entry_last_name, entry_email, entry_passw
         return
 
     messagebox.showinfo("Успех", "Регистрация прошла успешно!")
+    close_register_window_method()
 
 
 def open_register_window(root):
@@ -76,7 +77,7 @@ def open_register_window(root):
 
     register_button = tk.Button(register_window, text="Зарегистрироваться",
                                 command=lambda: register_command(entry_first_name, entry_last_name, entry_email,
-                                                         entry_password, entry_confirm_password), state=tk.DISABLED)
+                                                         entry_password, entry_confirm_password, close_register_window), state=tk.DISABLED)
     register_button.pack(pady=10)
 
     entry_first_name.bind("<KeyRelease>", lambda event: set_register_button_state(entry_first_name, entry_last_name, entry_email, entry_password, entry_confirm_password, register_button))
