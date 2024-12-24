@@ -1,4 +1,6 @@
 import tkinter as tk
+from tkinter import font
+from tkinter import ttk
 from tkinter import messagebox
 from backend.login import login
 from frontend.helpers import validate_email
@@ -34,25 +36,37 @@ def login_command(entry_email, entry_password):
 def open_login_window(root):
     login_window = tk.Toplevel()
     login_window.title("Авторизация")
-    login_window.geometry("300x200")
+    login_window.geometry("500x250")
+
+    label_font = font.Font(family="Arial", size=12, weight="bold")
+    button_font = font.Font(family="Arial", size=10, weight="bold")
 
     root.withdraw()
 
-    label_email = tk.Label(login_window, text="Email:")
-    label_email.pack(pady=5)
+    system_label = tk.Label(login_window, text="Авторизация", font=label_font)
+    system_label.pack(fill=tk.X, pady=10, padx=10)
+
+    separator1 = ttk.Separator(login_window, orient="horizontal")
+    separator1.pack(fill=tk.X)
+
+    label_email = tk.Label(login_window, text="Email:", font=label_font)
+    label_email.pack(fill=tk.X, padx=10)
 
     entry_email = tk.Entry(login_window)
-    entry_email.pack(pady=5)
+    entry_email.pack(fill=tk.X, pady=10, padx=10)
 
-    label_password = tk.Label(login_window, text="Пароль:")
-    label_password.pack(pady=5)
+    label_password = tk.Label(login_window, text="Пароль:", font=label_font)
+    label_password.pack(fill=tk.X, padx=10)
 
     entry_password = tk.Entry(login_window, show="*")
-    entry_password.pack(pady=5)
+    entry_password.pack(fill=tk.X, pady=10, padx=10)
 
-    login_button = tk.Button(login_window, text="Войти", command=lambda: login_command(entry_email, entry_password),
+    separator2 = ttk.Separator(login_window, orient="horizontal")
+    separator2.pack(fill=tk.X)
+
+    login_button = tk.Button(login_window, text="Войти", font=button_font, command=lambda: login_command(entry_email, entry_password),
                              state=tk.DISABLED)
-    login_button.pack(pady=10)
+    login_button.pack(fill=tk.X, pady=20, padx=10)
 
     entry_email.bind("<KeyRelease>", lambda event: set_login_button_state(entry_email, entry_password, login_button))
     entry_password.bind("<KeyRelease>", lambda event: set_login_button_state(entry_email, entry_password, login_button))

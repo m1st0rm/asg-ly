@@ -1,7 +1,10 @@
 import tkinter as tk
+from tkinter import ttk
+from tkinter import font
 from tkinter import messagebox
 from backend.register import register
 from frontend.helpers import validate_email
+
 
 def set_register_button_state(entry_first_name, entry_last_name, entry_email, entry_password, entry_confirm_password, register_button):
     if entry_first_name.get() and entry_last_name.get() and entry_email.get() and entry_password.get() and entry_confirm_password.get():
@@ -41,44 +44,56 @@ def register_command(entry_first_name, entry_last_name, entry_email, entry_passw
 def open_register_window(root):
     register_window = tk.Toplevel()
     register_window.title("Регистрация")
-    register_window.geometry("300x400")
+    register_window.geometry("500x450")
+
+    label_font = font.Font(family="Arial", size=12, weight="bold")
+    button_font = font.Font(family="Arial", size=10, weight="bold")
 
     root.withdraw()
 
-    label_first_name = tk.Label(register_window, text="Имя:")
-    label_first_name.pack(pady=5)
+    system_label = tk.Label(register_window, text="Регистрация", font=label_font)
+    system_label.pack(fill=tk.X, pady=10, padx=10)
+
+    separator1 = ttk.Separator(register_window, orient="horizontal")
+    separator1.pack(fill=tk.X)
+
+    label_first_name = tk.Label(register_window, text="Имя:", font=label_font)
+    label_first_name.pack(fill=tk.X, padx=10)
 
     entry_first_name = tk.Entry(register_window)
-    entry_first_name.pack(pady=5)
+    entry_first_name.pack(fill=tk.X, pady=10, padx=10)
 
-    label_last_name = tk.Label(register_window, text="Фамилия:")
-    label_last_name.pack(pady=5)
+    label_last_name = tk.Label(register_window, text="Фамилия:", font=label_font)
+    label_last_name.pack(fill=tk.X, padx=10)
 
     entry_last_name = tk.Entry(register_window)
-    entry_last_name.pack(pady=5)
+    entry_last_name.pack(fill=tk.X, pady=10, padx=10)
 
-    label_email = tk.Label(register_window, text="Email:")
-    label_email.pack(pady=5)
+    label_email = tk.Label(register_window, text="Email:", font=label_font)
+    label_email.pack(fill=tk.X, padx=10)
 
     entry_email = tk.Entry(register_window)
-    entry_email.pack(pady=5)
+    entry_email.pack(fill=tk.X, pady=10, padx=10)
 
-    label_password = tk.Label(register_window, text="Пароль:")
-    label_password.pack(pady=5)
+    label_password = tk.Label(register_window, text="Пароль:", font=label_font)
+    label_password.pack(fill=tk.X, padx=10)
 
     entry_password = tk.Entry(register_window, show="*")
-    entry_password.pack(pady=5)
+    entry_password.pack(fill=tk.X, pady=10, padx=10)
 
-    label_confirm_password = tk.Label(register_window, text="Подтвердите пароль:")
-    label_confirm_password.pack(pady=5)
+    label_confirm_password = tk.Label(register_window, text="Подтвердите пароль:", font=label_font)
+    label_confirm_password.pack(fill=tk.X, padx=10)
 
     entry_confirm_password = tk.Entry(register_window, show="*")
-    entry_confirm_password.pack(pady=5)
+    entry_confirm_password.pack(fill=tk.X, pady=10, padx=10)
 
-    register_button = tk.Button(register_window, text="Зарегистрироваться",
+    separator2 = ttk.Separator(register_window, orient="horizontal")
+    separator2.pack(fill=tk.X)
+
+    register_button = tk.Button(register_window, text="Зарегистрироваться", font=button_font,
                                 command=lambda: register_command(entry_first_name, entry_last_name, entry_email,
                                                          entry_password, entry_confirm_password, close_register_window), state=tk.DISABLED)
-    register_button.pack(pady=10)
+    register_button.pack(fill=tk.X, pady=20, padx=10)
 
     entry_first_name.bind("<KeyRelease>", lambda event: set_register_button_state(entry_first_name, entry_last_name, entry_email, entry_password, entry_confirm_password, register_button))
     entry_last_name.bind("<KeyRelease>", lambda event: set_register_button_state(entry_first_name, entry_last_name, entry_email, entry_password, entry_confirm_password, register_button))
