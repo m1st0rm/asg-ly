@@ -44,3 +44,32 @@ def db_insert_action_log(user_id, action_details):
     db_connection.commit()
     db_connection.close()
 
+
+def db_get_user_by_id(user_id):
+    db_connection = get_db_connection()
+    query = QUERIES['get_user_by_id']
+    with db_connection.cursor() as cursor:
+        cursor.execute(query, (user_id,))
+        result = cursor.fetchone()
+    db_connection.close()
+    return result
+
+
+def db_get_role_by_id(role_id):
+    db_connection = get_db_connection()
+    query = QUERIES['get_role_by_id']
+    with db_connection.cursor() as cursor:
+        cursor.execute(query, (role_id,))
+        result = cursor.fetchone()
+    db_connection.close()
+    return result
+
+
+def db_get_department_by_id(department_id):
+    db_connection = get_db_connection()
+    query = QUERIES['get_department_by_id']
+    with db_connection.cursor() as cursor:
+        cursor.execute(query, (department_id,))
+        result = cursor.fetchone()
+    db_connection.close()
+    return result

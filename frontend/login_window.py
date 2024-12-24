@@ -4,6 +4,7 @@ from tkinter import ttk
 from tkinter import messagebox
 from backend.login import login
 from frontend.helpers import validate_email
+from frontend.role_window_decider import role_window_decider
 
 
 def set_login_button_state(entry_email, entry_password, login_button):
@@ -13,7 +14,7 @@ def set_login_button_state(entry_email, entry_password, login_button):
         login_button.config(state=tk.DISABLED)
 
 
-def login_command(entry_email, entry_password):
+def login_command(entry_email, entry_password, login_window):
     email = entry_email.get()
 
     if not validate_email(email):
@@ -31,6 +32,7 @@ def login_command(entry_email, entry_password):
         return
 
     messagebox.showinfo("Успех", "Вы успешно авторизованы!")
+    role_window_decider(login_window, user['user_id'], user['role_id'])
 
 
 def open_login_window(root):
@@ -64,7 +66,7 @@ def open_login_window(root):
     separator2 = ttk.Separator(login_window, orient="horizontal")
     separator2.pack(fill=tk.X)
 
-    login_button = tk.Button(login_window, text="Войти", font=button_font, command=lambda: login_command(entry_email, entry_password),
+    login_button = tk.Button(login_window, text="Войти", font=button_font, command=lambda: login_command(entry_email, entry_password, login_window),
                              state=tk.DISABLED)
     login_button.pack(fill=tk.X, pady=20, padx=10)
 

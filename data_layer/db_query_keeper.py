@@ -22,9 +22,27 @@ INSERT_ACTION_LOG = """
     VALUES(%s, %s);
 """
 
+GET_USER_BY_ID = """
+    SELECT * FROM public.users
+    WHERE user_id = %s;
+"""
+
+GET_ROLE_BY_ID = """
+SELECT * FROM public.role
+WHERE role_id = %s;
+"""
+
+GET_DEPARTMENT_BY_ID = """
+SELECT * FROM public.department
+WHERE department_id = %s;
+"""
+
 QUERIES = {
     'register': REGISTER_USER,
     'login': LOGIN_USER,
     'get_user_by_email': GET_USER_BY_EMAIL,
-    'insert_action_log': INSERT_ACTION_LOG
+    'insert_action_log': INSERT_ACTION_LOG,
+    'get_user_by_id': GET_USER_BY_ID,
+    'get_role_by_id': GET_ROLE_BY_ID,
+    'get_department_by_id': GET_DEPARTMENT_BY_ID
 }
