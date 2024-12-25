@@ -12,6 +12,7 @@ def get_action_history(user_id):
     if len(result) == 0:
         return action_history.append(
             {
+                "ID лога": 'Нет логов',
                 "ID пользователя": 'Нет логов',
                 "Имя пользователя": 'Нет логов',
                 "Фамилия пользователя": 'Нет логов',
@@ -37,6 +38,7 @@ def get_action_history(user_id):
 
         action_history.append(
             {
+                "ID лога": row[0],
                 "ID пользователя": row[1],
                 "Имя пользователя": row[5],
                 "Фамилия пользователя": row[6],

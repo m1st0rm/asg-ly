@@ -53,7 +53,7 @@ def open_logs_window(root, user_id):
             return text_font.measure(text) + 20
 
         for col in columns:
-            tree.heading(col, text=col)
+            tree.heading(col, text=col, anchor=tk.W)
             max_width_data = max(calculate_width(str(row[col])) for row in data)
             max_width_column = calculate_width(col)
             max_width = max([max_width_data, max_width_column])
