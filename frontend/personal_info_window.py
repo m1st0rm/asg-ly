@@ -51,6 +51,7 @@ def update_personal_info(new_first_name_entry, new_last_name_entry, new_email_en
         if not validate_email(new_email_entry.get()):
             messagebox.showerror("Ошибка", "Некорректный формат Email.")
             return
+
         new_email = new_email_entry.get()
 
     if not current_password_entry.get() and not new_password_entry.get() and not new_password_confirm_entry.get():
@@ -67,7 +68,11 @@ def update_personal_info(new_first_name_entry, new_last_name_entry, new_email_en
 
     status = update_personal_info_by_user_id(current_user['user_id'], new_first_name, new_last_name, new_email, hashed_password)
 
-    if not status:
+    if status == 0:
+        messagebox.showerror("Ошибка", "Пользователь с таким Email уже существует.")
+        return
+
+    if status == 1:
         messagebox.showerror("Ошибка", "Непредвиденная ошибка.")
         return
 
