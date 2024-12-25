@@ -10,7 +10,7 @@ def get_action_history(user_id):
     action_history = []
 
     if len(result) == 0:
-        return action_history.append(
+        action_history.append(
             {
                 "ID лога": 'Нет логов',
                 "ID пользователя": 'Нет логов',
@@ -20,9 +20,10 @@ def get_action_history(user_id):
                 "Роль пользователя": 'Нет логов',
                 "Отдел пользователя": 'Нет логов',
                 "Описание дейтсвия": 'Нет логов',
-                "Время совершения действия": 'Нет логов',
+                "Дата и время совершения действия": 'Нет логов',
             }
         )
+        return action_history
 
     for row in result:
 

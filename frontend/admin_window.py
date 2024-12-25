@@ -3,6 +3,7 @@ from tkinter import ttk
 from tkinter import font
 from frontend.personal_info_window import open_personal_info_window
 from frontend.logs_window import open_logs_window
+from frontend.departments_management_window import open_departments_management_window
 
 
 def open_admin_window(root, user_id):
@@ -39,7 +40,7 @@ def open_admin_window(root, user_id):
     separator4 = ttk.Separator(admin_window, orient="horizontal")
     separator4.pack(fill=tk.X)
 
-    manage_departments_button = tk.Button(admin_window, text="Управление отделами", font=button_font, state=tk.NORMAL)
+    manage_departments_button = tk.Button(admin_window, text="Управление отделами", font=button_font, state=tk.NORMAL, command=lambda: open_departments_management_window(admin_window, user_id))
     manage_departments_button.pack(fill=tk.X, pady=20, padx=10)
 
     def close_admin_window():

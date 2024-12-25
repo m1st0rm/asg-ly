@@ -94,3 +94,14 @@ def db_get_action_history():
         result = cursor.fetchall()
     db_connection.close()
     return result
+
+
+def db_get_departments():
+    db_connection = get_db_connection()
+    query = QUERIES['get_departments']
+    with db_connection.cursor() as cursor:
+        cursor.execute(query)
+        result = cursor.fetchall()
+    db_connection.close()
+    return result
+

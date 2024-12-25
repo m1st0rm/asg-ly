@@ -66,6 +66,10 @@ GET_ACTION_HISTORY = """
     ORDER BY a.created_at DESC;
 """
 
+GET_DEPARTMENTS = """
+SELECT * FROM public.department
+"""
+
 QUERIES = {
     'register': REGISTER_USER,
     'login': LOGIN_USER,
@@ -76,4 +80,5 @@ QUERIES = {
     'get_department_by_id': GET_DEPARTMENT_BY_ID,
     'update_user_personal_info': UPDATE_USER_PERSONAL_INFO,
     'get_action_history': GET_ACTION_HISTORY,
+    'get_departments': GET_DEPARTMENTS,
 }
