@@ -29,6 +29,9 @@ def open_logs_window(root, user_id):
     scrollbar_x = ttk.Scrollbar(frame, orient=tk.HORIZONTAL)
     scrollbar_x.pack(side=tk.BOTTOM, fill=tk.X)
 
+    separator2 = ttk.Separator(logs_window, orient="horizontal")
+    separator2.pack(fill=tk.X)
+
     update_button = tk.Button(logs_window, text="Обновить", font=button_font, command=lambda: update_table())
     update_button.pack(fill=tk.X, padx=10, pady=10)
 
