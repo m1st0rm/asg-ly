@@ -12,6 +12,7 @@ def open_logs_window(root, user_id):
     root.withdraw()
 
     label_font = font.Font(family="Arial", size=12, weight="bold")
+    button_font = font.Font(family="Arial", size=10, weight="bold")
 
     system_label = tk.Label(logs_window, text="Журнал действий пользователей", font=label_font)
     system_label.pack(fill=tk.X, pady=5, padx=10)
@@ -28,35 +29,49 @@ def open_logs_window(root, user_id):
     scrollbar_x = ttk.Scrollbar(frame, orient=tk.HORIZONTAL)
     scrollbar_x.pack(side=tk.BOTTOM, fill=tk.X)
 
-    data = get_action_history(user_id)
+    update_button = tk.Button(logs_window, text="Обновить", font=button_font, command=lambda: update_table())
+    update_button.pack(fill=tk.X, padx=10, pady=10)
 
-    columns = list(data[0].keys())
-    tree = ttk.Treeview(frame, columns=columns, show='headings',
-                        yscrollcommand=scrollbar_y.set, xscrollcommand=scrollbar_x.set)
+    def update_table():
+        nonlocal user_id
+        data = get_action_history(user_id)
 
-    text_font = font.Font(family="TkDefaultFont")
+        for widget in frame.winfo_children():
+            if isinstance(widget, ttk.Scrollbar):
+                continue
+            widget.destroy()
 
-    def calculate_width(text):
-        return text_font.measure(text) + 20
+        columns = list(data[0].keys())
 
-    for col in columns:
-        tree.heading(col, text=col)
-        max_width_data = max(calculate_width(str(row[col])) for row in data)
-        max_width_column = calculate_width(col)
-        max_width = max([max_width_data, max_width_column])
-        tree.column(col, width=max_width, anchor=tk.W)
+        tree = ttk.Treeview(frame, columns=columns, show='headings',
+                            yscrollcommand=scrollbar_y.set, xscrollcommand=scrollbar_x.set)
 
-    for row in data:
-        values = tuple(row[col] for col in columns)
-        tree.insert('', tk.END, values=values)
+        text_font = font.Font(family="TkDefaultFont")
 
-    tree.pack(fill=tk.BOTH, expand=True)
+        def calculate_width(text):
+            nonlocal text_font
+            return text_font.measure(text) + 20
 
-    scrollbar_y.config(command=tree.yview)
-    scrollbar_x.config(command=tree.xview)
+        for col in columns:
+            tree.heading(col, text=col)
+            max_width_data = max(calculate_width(str(row[col])) for row in data)
+            max_width_column = calculate_width(col)
+            max_width = max([max_width_data, max_width_column])
+            tree.column(col, width=max_width, anchor=tk.W)
+
+        for row in data:
+            values = tuple(row[col] for col in columns)
+            tree.insert('', tk.END, values=values)
+
+        tree.pack(fill=tk.BOTH, expand=True)
+
+        scrollbar_y.config(command=tree.yview)
+        scrollbar_x.config(command=tree.xview)
 
     def close_logs_window():
         logs_window.destroy()
         root.deiconify()
 
     logs_window.protocol("WM_DELETE_WINDOW", close_logs_window)
+
+    update_table()
