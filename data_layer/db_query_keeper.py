@@ -67,7 +67,19 @@ GET_ACTION_HISTORY = """
 """
 
 GET_DEPARTMENTS = """
-SELECT * FROM public.department
+SELECT 
+    d.department_id, 
+    d.department_name, 
+    d.created_at, 
+    d.updated_at, 
+    COUNT(u.user_id) 
+FROM 
+    public.department d 
+INNER JOIN 
+    public.users u 
+    ON d.department_id = u.department_id 
+GROUP BY d.department_id
+ORDER BY d.department_id ASC;
 """
 
 QUERIES = {

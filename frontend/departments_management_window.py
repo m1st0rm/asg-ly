@@ -7,7 +7,7 @@ from backend.department_management import get_departments
 def open_departments_management_window(root, user_id):
     departments_management_window = tk.Toplevel()
     departments_management_window.title("Управление отделами")
-    departments_management_window.geometry("1000x800")
+    departments_management_window.geometry("1500x800")
 
     root.withdraw()
 
