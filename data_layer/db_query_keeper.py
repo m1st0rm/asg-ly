@@ -49,6 +49,23 @@ UPDATE_USER_PERSONAL_INFO = """
     RETURNING user_id;
 """
 
+GET_ACTION_HISTORY = """
+    SELECT 
+        *
+    FROM 
+        public.actionhistory AS a
+    LEFT JOIN 
+        public.users AS u
+        ON a.user_id = u.user_id
+    LEFT JOIN 
+        public.role AS r
+        ON u.role_id = r.role_id
+    LEFT JOIN 
+        public.department AS d
+        ON u.department_id = d.department_id
+    ORDER BY a.created_at DESC;
+"""
+
 QUERIES = {
     'register': REGISTER_USER,
     'login': LOGIN_USER,
@@ -58,4 +75,5 @@ QUERIES = {
     'get_role_by_id': GET_ROLE_BY_ID,
     'get_department_by_id': GET_DEPARTMENT_BY_ID,
     'update_user_personal_info': UPDATE_USER_PERSONAL_INFO,
+    'get_action_history': GET_ACTION_HISTORY,
 }

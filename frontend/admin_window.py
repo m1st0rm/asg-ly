@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import font
 from frontend.personal_info_window import open_personal_info_window
+from frontend.logs_window import open_logs_window
 
 
 def open_admin_window(root, user_id):
@@ -26,7 +27,7 @@ def open_admin_window(root, user_id):
     separator2 = ttk.Separator(admin_window, orient="horizontal")
     separator2.pack(fill=tk.X)
 
-    look_logs_button = tk.Button(admin_window, text="Посмотреть логи", font=button_font, state=tk.NORMAL)
+    look_logs_button = tk.Button(admin_window, text="Посмотреть логи действий", font=button_font, state=tk.NORMAL, command=lambda: open_logs_window(admin_window, user_id))
     look_logs_button.pack(fill=tk.X, pady=20, padx=10)
 
     separator3 = ttk.Separator(admin_window, orient="horizontal")

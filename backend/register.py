@@ -2,7 +2,7 @@ from data_layer.db_executor import db_register, db_get_user_by_email, db_insert_
 from backend.helpers import *
 
 
-REGISTER_ACTION_DETAILS = "Пользователь зарегестрировался в системе."
+REGISTER_ACTION_DETAILS = "Пользователь зарегистрировался в системе."
 
 
 def register(first_name, last_name, email, password):
