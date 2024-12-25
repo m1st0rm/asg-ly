@@ -28,13 +28,25 @@ GET_USER_BY_ID = """
 """
 
 GET_ROLE_BY_ID = """
-SELECT * FROM public.role
-WHERE role_id = %s;
+    SELECT * FROM public.role
+    WHERE role_id = %s;
 """
 
 GET_DEPARTMENT_BY_ID = """
-SELECT * FROM public.department
-WHERE department_id = %s;
+    SELECT * FROM public.department
+    WHERE department_id = %s;
+"""
+
+UPDATE_USER_PERSONAL_INFO = """
+    UPDATE public.users
+    SET 
+        first_name = %s,
+        last_name = %s,
+        email = %s,
+        password_hash = %s,
+        updated_at = CURRENT_TIMESTAMP
+    WHERE user_id = %s
+    RETURNING user_id;
 """
 
 QUERIES = {
@@ -44,5 +56,6 @@ QUERIES = {
     'insert_action_log': INSERT_ACTION_LOG,
     'get_user_by_id': GET_USER_BY_ID,
     'get_role_by_id': GET_ROLE_BY_ID,
-    'get_department_by_id': GET_DEPARTMENT_BY_ID
+    'get_department_by_id': GET_DEPARTMENT_BY_ID,
+    'update_user_personal_info': UPDATE_USER_PERSONAL_INFO,
 }

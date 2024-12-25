@@ -1,11 +1,78 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import font
-from backend.personal_info import get_personal_info_by_user_id
+from tkinter import messagebox
+from backend.personal_info import get_personal_info_by_user_id, update_personal_info_by_user_id
+from backend.helpers import hash_data
+from frontend.helpers import validate_email
 
 
-def update_personal_info():
-    pass
+def set_make_update_button_state(new_first_name_entry, new_last_name_entry, new_email_entry, current_password_entry, new_password_entry, new_password_confirm_entry, make_update_button):
+    if current_password_entry.get() and new_password_entry.get() and new_password_confirm_entry.get():
+        password_change_status = 1
+    elif not current_password_entry.get() and not new_password_entry.get() and not new_password_confirm_entry.get():
+        password_change_status = 2
+    else:
+        password_change_status = 0
+
+    if new_first_name_entry.get() or new_last_name_entry.get() or new_email_entry.get():
+        other_change_status = 1
+    else:
+        other_change_status = 0
+
+    if other_change_status == 0 and password_change_status == 0:
+        make_update_button.config(state=tk.DISABLED)
+    if other_change_status == 0 and password_change_status == 1:
+        make_update_button.config(state=tk.NORMAL)
+    if other_change_status == 0 and password_change_status == 2:
+        make_update_button.config(state=tk.DISABLED)
+    if other_change_status == 1 and password_change_status == 0:
+        make_update_button.config(state=tk.DISABLED)
+    if other_change_status == 1 and password_change_status == 1:
+        make_update_button.config(state=tk.NORMAL)
+    if other_change_status == 1 and password_change_status == 2:
+        make_update_button.config(state=tk.NORMAL)
+
+
+def update_personal_info(new_first_name_entry, new_last_name_entry, new_email_entry, current_password_entry, new_password_entry, new_password_confirm_entry, current_user, update_window_method):
+    if not new_first_name_entry.get():
+        new_first_name = current_user['first_name']
+    else:
+        new_first_name = new_first_name_entry.get()
+
+    if not new_last_name_entry.get():
+        new_last_name = current_user['last_name']
+    else:
+        new_last_name = new_last_name_entry.get()
+
+    if not new_email_entry.get():
+        new_email = current_user['email']
+    else:
+        if not validate_email(new_email_entry.get()):
+            messagebox.showerror("Ошибка", "Некорректный формат Email.")
+            return
+        new_email = new_email_entry.get()
+
+    if not current_password_entry.get() and not new_password_entry.get() and not new_password_confirm_entry.get():
+        hashed_password = current_user['hashed_password']
+    else:
+        if hash_data(current_password_entry.get()) != current_user["hashed_password"]:
+            messagebox.showerror("Ошибка", "Текущий пароль указан неверно.")
+            return
+        if new_password_entry.get() != new_password_confirm_entry.get():
+            messagebox.showerror("Ошибка", "Новые пароли не совпадают.")
+            return
+
+        hashed_password = hash_data(new_password_entry.get())
+
+    status = update_personal_info_by_user_id(current_user['user_id'], new_first_name, new_last_name, new_email, hashed_password)
+
+    if not status:
+        messagebox.showerror("Ошибка", "Непредвиденная ошибка.")
+        return
+
+    messagebox.showinfo("Успех", "Персональные данные успешно обновлены.")
+    update_window_method()
 
 
 def open_personal_info_window(root, user_id):
@@ -93,7 +160,7 @@ def open_personal_info_window(root, user_id):
     separator6.pack(fill=tk.X)
 
     make_update_button = tk.Button(personal_info_window, text='Обновить личную информацию', font=button_font,
-                                   command=lambda: update_personal_info())
+                                   command=lambda: update_personal_info(new_first_name_entry, new_last_name_entry, new_email_entry, current_password_entry, new_password_entry, new_password_confirm_entry, current_user, update_window), state=tk.DISABLED)
     make_update_button.pack(fill=tk.X, pady=5, padx=10)
 
     separator7 = ttk.Separator(personal_info_window, orient="horizontal")
@@ -131,6 +198,13 @@ def open_personal_info_window(root, user_id):
 
     last_update_timestamp_label = tk.Label(personal_info_window, font=label_font)
     last_update_timestamp_label.pack(fill=tk.X, pady=5, padx=10)
+
+    new_first_name_entry.bind("<KeyRelease>", lambda e: set_make_update_button_state(new_first_name_entry, new_last_name_entry, new_email_entry, current_password_entry, new_password_entry, new_password_confirm_entry, make_update_button))
+    new_last_name_entry.bind("<KeyRelease>", lambda e: set_make_update_button_state(new_first_name_entry, new_last_name_entry, new_email_entry, current_password_entry, new_password_entry, new_password_confirm_entry, make_update_button))
+    new_email_entry.bind("<KeyRelease>", lambda e: set_make_update_button_state(new_first_name_entry, new_last_name_entry, new_email_entry, current_password_entry, new_password_entry, new_password_confirm_entry, make_update_button))
+    current_password_entry.bind("<KeyRelease>", lambda e: set_make_update_button_state(new_first_name_entry, new_last_name_entry, new_email_entry, current_password_entry, new_password_entry, new_password_confirm_entry, make_update_button))
+    new_password_entry.bind("<KeyRelease>", lambda e: set_make_update_button_state(new_first_name_entry, new_last_name_entry, new_email_entry, current_password_entry, new_password_entry, new_password_confirm_entry, make_update_button))
+    new_password_confirm_entry.bind("<KeyRelease>", lambda e: set_make_update_button_state(new_first_name_entry, new_last_name_entry, new_email_entry, current_password_entry, new_password_entry, new_password_confirm_entry, make_update_button))
 
     def update_window():
         nonlocal current_user

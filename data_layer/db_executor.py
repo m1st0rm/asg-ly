@@ -73,3 +73,14 @@ def db_get_department_by_id(department_id):
         result = cursor.fetchone()
     db_connection.close()
     return result
+
+
+def db_update_user_personal_info(updations):
+    db_connection = get_db_connection()
+    query = QUERIES['update_user_personal_info']
+    with db_connection.cursor() as cursor:
+        cursor.execute(query, updations)
+        result = cursor.fetchone()
+    db_connection.commit()
+    db_connection.close()
+    return result

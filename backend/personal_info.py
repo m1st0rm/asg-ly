@@ -1,6 +1,11 @@
-from data_layer.db_executor import db_get_user_by_id, db_get_role_by_id, db_get_department_by_id, db_insert_action_log
+from data_layer.db_executor import (db_get_user_by_id,
+                                    db_get_role_by_id,
+                                    db_get_department_by_id,
+                                    db_insert_action_log,
+                                    db_update_user_personal_info)
 
 GETTING_PERSONAL_INFO_BY_ID_DETAILS = "Пользователь просмотрел информацию о своей учётной записи."
+UPDATING_PERSONAL_INFO_BY_ID_DETAILS = "Пользователь изменил свои персональные данные."
 
 
 def get_personal_info_by_user_id(user_id):
@@ -31,3 +36,14 @@ def get_personal_info_by_user_id(user_id):
             "created_at": user[8],
             "updated_at": user[9],
         }
+
+
+def update_personal_info_by_user_id(user_id, new_first_name, new_last_name, new_email, new_hashed_password):
+    user = db_update_user_personal_info((new_first_name, new_last_name, new_email, new_hashed_password, user_id))
+
+    if user[0] != user_id:
+        return False
+    else:
+        db_insert_action_log(user[0], UPDATING_PERSONAL_INFO_BY_ID_DETAILS)
+        return True
+
