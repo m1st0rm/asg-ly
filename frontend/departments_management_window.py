@@ -14,11 +14,17 @@ def open_departments_management_window(root, user_id):
     label_font = font.Font(family="Arial", size=12, weight="bold")
     button_font = font.Font(family="Arial", size=10, weight="bold")
 
-    system_label = tk.Label(departments_management_window, text="Управление отделами", font=label_font)
+    system_label = tk.Label(departments_management_window, text="Панель управления отделами", font=label_font)
     system_label.pack(fill=tk.X, pady=5, padx=10)
 
     separator1 = ttk.Separator(departments_management_window, orient="horizontal")
     separator1.pack(fill=tk.X)
+
+    current_departments_label = tk.Label(departments_management_window, text="Текущее состояние отделов", font=label_font)
+    current_departments_label.pack(fill=tk.X, pady=5, padx=10)
+
+    separator2 = ttk.Separator(departments_management_window, orient="horizontal")
+    separator2.pack(fill=tk.X)
 
     frame = tk.Frame(departments_management_window)
     frame.pack(fill=tk.BOTH, padx=5, pady=10, expand=True)
