@@ -105,3 +105,34 @@ def db_get_departments():
     db_connection.close()
     return result
 
+
+def db_add_department(department_name):
+    db_connection = get_db_connection()
+    query = QUERIES['add_department']
+    with db_connection.cursor() as cursor:
+        cursor.execute(query, (department_name,))
+        result = cursor.fetchone()
+    db_connection.commit()
+    db_connection.close()
+    return result
+
+
+def db_get_department_by_name(department_name):
+    db_connection = get_db_connection()
+    query = QUERIES['get_department_by_name']
+    with db_connection.cursor() as cursor:
+        cursor.execute(query, (department_name,))
+        result = cursor.fetchone()
+    db_connection.close()
+    return result
+
+
+def db_update_department_by_id(department_id, department_name):
+    db_connection = get_db_connection()
+    query = QUERIES['update_department']
+    with db_connection.cursor() as cursor:
+        cursor.execute(query, (department_name, department_id))
+        result = cursor.fetchone()
+    db_connection.commit()
+    db_connection.close()
+    return result

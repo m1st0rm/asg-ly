@@ -1,7 +1,57 @@
 import tkinter as tk
-from tkinter import font
+from tkinter import font, messagebox
 from tkinter import ttk
-from backend.department_management import get_departments
+from frontend.helpers import is_positive_integer
+from backend.department_management import (get_departments,
+                                           add_department,
+                                           update_department)
+
+
+def set_add_department_button_state(add_department_name_entry, add_department_button):
+    if not add_department_name_entry.get():
+        add_department_button.config(state=tk.DISABLED)
+    else:
+        add_department_button.config(state=tk.NORMAL)
+
+
+def set_update_department_button_state(update_department_id_entry, update_department_name_entry, update_department_button):
+    if not update_department_id_entry.get() or not update_department_name_entry.get():
+        update_department_button.config(state=tk.DISABLED)
+    else:
+        update_department_button.config(state=tk.NORMAL)
+
+
+def insert_new_department(user_id, add_department_name_entry, update_table_method):
+    status = add_department(user_id, add_department_name_entry.get())
+    if status == 1:
+        messagebox.showerror("Ошибка", "Отдел с таким именем уже существует.")
+        return
+
+    if status == 2:
+        messagebox.showerror("Ошибка", "Произошла непредвиденная ошибка.")
+        return
+
+    messagebox.showinfo("Успех", "Новый отдел успешно добавлен.")
+    update_table_method()
+
+
+def update_department_info(user_id, update_department_id_entry, update_department_name_entry, update_table_method):
+    if not is_positive_integer(update_department_id_entry.get()):
+        messagebox.showerror("Ошибка", "Неверный формат ID отдела.")
+        return
+    status = update_department(user_id, update_department_id_entry.get(), update_department_name_entry.get())
+    if status == 1:
+        messagebox.showerror('Ошибка', "Отдела с указанным ID не существует.")
+        return
+    if status == 2:
+        messagebox.showerror("Ошибка", "Отдел с таким именем уже существует.")
+        return
+    if status == 3:
+        messagebox.showerror("Ошибка", "Произошла непредвиденная ошибка.")
+        return
+
+    messagebox.showinfo("Успех", "Отдел успешно переименован.")
+    update_table_method()
 
 
 def open_departments_management_window(root, user_id):
@@ -34,6 +84,51 @@ def open_departments_management_window(root, user_id):
 
     separator2 = ttk.Separator(departments_management_window, orient="horizontal")
     separator2.pack(fill=tk.X)
+
+    add_department_label = tk.Label(departments_management_window, text="Добавление нового отдела", font=label_font)
+    add_department_label.pack(fill=tk.X, pady=5, padx=10)
+
+    separator3 = ttk.Separator(departments_management_window, orient="horizontal")
+    separator3.pack(fill=tk.X)
+
+    add_department_name_label = tk.Label(departments_management_window, text="Имя нового отдела:", font=label_font)
+    add_department_name_label.pack(fill=tk.X, pady=5, padx=10)
+
+    add_department_name_entry = tk.Entry(departments_management_window)
+    add_department_name_entry.pack(fill=tk.X, pady=5, padx=10)
+
+    add_department_button = tk.Button(departments_management_window, text="Добавить отдел", font=button_font,
+                                      command=lambda: insert_new_department(user_id, add_department_name_entry, update_table), state=tk.DISABLED)
+    add_department_button.pack(fill=tk.X, pady=5, padx=10)
+
+    separator4 = ttk.Separator(departments_management_window, orient="horizontal")
+    separator4.pack(fill=tk.X)
+
+    update_department_label = tk.Label(departments_management_window, text="Изменение существующего отдела", font=label_font)
+    update_department_label.pack(fill=tk.X, pady=5, padx=10)
+
+    separator5 = ttk.Separator(departments_management_window, orient="horizontal")
+    separator5.pack(fill=tk.X)
+
+    update_department_id_label = tk.Label(departments_management_window, text="ID отдела для изменения:", font=label_font)
+    update_department_id_label.pack(fill=tk.X, pady=5, padx=10)
+
+    update_department_id_entry = tk.Entry(departments_management_window)
+    update_department_id_entry.pack(fill=tk.X, pady=5, padx=10)
+
+    update_department_name_label = tk.Label(departments_management_window, text="Новое имя отдела:", font=label_font)
+    update_department_name_label.pack(fill=tk.X, pady=5, padx=10)
+
+    update_department_name_entry = tk.Entry(departments_management_window)
+    update_department_name_entry.pack(fill=tk.X, pady=5, padx=10)
+
+    update_department_button = tk.Button(departments_management_window, text="Изменить отдел", font=button_font,
+                                         command=lambda: update_department_info(user_id, update_department_id_entry, update_department_name_entry, update_table), state=tk.DISABLED)
+    update_department_button.pack(fill=tk.X, pady=5, padx=10)
+
+    add_department_name_entry.bind("<KeyRelease>", lambda e: set_add_department_button_state(add_department_name_entry, add_department_button))
+    update_department_id_entry.bind("<KeyRelease>", lambda e: set_update_department_button_state(update_department_id_entry, update_department_name_entry, update_department_button))
+    update_department_name_entry.bind("<KeyRelease>", lambda e: set_update_department_button_state(update_department_id_entry, update_department_name_entry, update_department_button))
 
     def update_table():
         nonlocal user_id

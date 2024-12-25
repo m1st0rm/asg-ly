@@ -75,11 +75,31 @@ SELECT
     COUNT(u.user_id) 
 FROM 
     public.department d 
-INNER JOIN 
+LEFT JOIN 
     public.users u 
     ON d.department_id = u.department_id 
 GROUP BY d.department_id
 ORDER BY d.department_id ASC;
+"""
+
+ADD_DEPARTMENT = """
+INSERT INTO public.department (department_name)
+VALUES (%s)
+RETURNING department_name;
+"""
+
+GET_DEPARTMENT_BY_NAME = """
+SELECT * FROM public.department
+WHERE department_name = %s;
+"""
+
+UPDATE_DEPARTMENT = """
+UPDATE public.department
+SET
+    department_name = %s,
+    updated_at = CURRENT_TIMESTAMP
+WHERE department_id = %s
+RETURNING department_name;
 """
 
 QUERIES = {
@@ -93,4 +113,7 @@ QUERIES = {
     'update_user_personal_info': UPDATE_USER_PERSONAL_INFO,
     'get_action_history': GET_ACTION_HISTORY,
     'get_departments': GET_DEPARTMENTS,
+    'add_department': ADD_DEPARTMENT,
+    'get_department_by_name': GET_DEPARTMENT_BY_NAME,
+    'update_department': UPDATE_DEPARTMENT,
 }
