@@ -102,6 +102,85 @@ WHERE department_id = %s
 RETURNING department_name;
 """
 
+GET_USERS_EX_ADMIN = """
+SELECT 
+    u.user_id, 
+    u.first_name, 
+    u.last_name, 
+    u.email, 
+    u.is_active, 
+    u.created_at, 
+    u.updated_at, 
+    d.department_name, 
+    r.role_name
+FROM 
+    public.users u
+LEFT JOIN 
+    public.department d ON u.department_id = d.department_id
+LEFT JOIN 
+    public.role r ON u.role_id = r.role_id
+WHERE 
+    u.role_id <> 1
+ORDER BY u.user_id ASC;
+"""
+
+GET_ROLES_NAMES = """
+SELECT role_name FROM public.role
+WHERE role_id <> 1;
+"""
+
+GET_DEPARTMENTS_NAMES = """
+SELECT department_name FROM public.department
+"""
+
+UPDATE_USER_ACTIVE_STATUS = """
+UPDATE public.users
+SET 
+    is_active = %s,
+    updated_at = CURRENT_TIMESTAMP
+WHERE user_id = %s
+RETURNING is_active;
+"""
+
+UPDATE_USER_ROLE = """
+UPDATE public.users
+SET 
+    role_id = %s,
+    updated_at = CURRENT_TIMESTAMP
+WHERE user_id = %s
+RETURNING role_id;
+"""
+
+UPDATE_USER_DEPARTMENT = """
+UPDATE public.users
+SET 
+    department_id = %s,
+    updated_at = CURRENT_TIMESTAMP
+WHERE user_id = %s
+RETURNING department_id;
+"""
+
+GET_ROLE_ID_BY_NAME = """
+SELECT role_id
+FROM public.role
+WHERE role_name = %s
+"""
+
+GET_DEPARTMENT_ID_BY_NAME = """
+SELECT department_id
+FROM public.department
+WHERE department_name = %s
+"""
+
+IS_USER_AVAILABLE_TO_CHANGE_ROLE = """
+SELECT *
+FROM public.task
+WHERE 
+    assigned_to_user_id = %s
+    AND execution_status_id <> 4
+    AND assignor_status_id <> 3;
+"""
+
 QUERIES = {
     'register': REGISTER_USER,
     'login': LOGIN_USER,
@@ -116,4 +195,13 @@ QUERIES = {
     'add_department': ADD_DEPARTMENT,
     'get_department_by_name': GET_DEPARTMENT_BY_NAME,
     'update_department': UPDATE_DEPARTMENT,
+    'get_users_ex_admin': GET_USERS_EX_ADMIN,
+    'get_roles_names': GET_ROLES_NAMES,
+    'get_departments_names': GET_DEPARTMENTS_NAMES,
+    'update_user_active_status': UPDATE_USER_ACTIVE_STATUS,
+    'update_user_role': UPDATE_USER_ROLE,
+    'update_user_department': UPDATE_USER_DEPARTMENT,
+    'get_role_id_by_name': GET_ROLE_ID_BY_NAME,
+    'get_department_id_by_name': GET_DEPARTMENT_ID_BY_NAME,
+    "is_user_available_to_change_role": IS_USER_AVAILABLE_TO_CHANGE_ROLE,
 }

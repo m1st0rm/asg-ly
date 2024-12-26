@@ -136,3 +136,96 @@ def db_update_department_by_id(department_id, department_name):
     db_connection.commit()
     db_connection.close()
     return result
+
+
+def db_get_users_ex_admin():
+    db_connection = get_db_connection()
+    query = QUERIES['get_users_ex_admin']
+    with db_connection.cursor() as cursor:
+        cursor.execute(query)
+        result = cursor.fetchall()
+    db_connection.close()
+    return result
+
+
+def db_get_roles_names():
+    db_connection = get_db_connection()
+    query = QUERIES['get_roles_names']
+    with db_connection.cursor() as cursor:
+        cursor.execute(query)
+        result = cursor.fetchall()
+    db_connection.close()
+    return result
+
+
+def db_get_departments_names():
+    db_connection = get_db_connection()
+    query = QUERIES['get_departments_names']
+    with db_connection.cursor() as cursor:
+        cursor.execute(query)
+        result = cursor.fetchall()
+    db_connection.close()
+    return result
+
+
+def db_update_user_active_status(user_id, active_status):
+    db_connection = get_db_connection()
+    query = QUERIES['update_user_active_status']
+    with db_connection.cursor() as cursor:
+        cursor.execute(query, (active_status, user_id))
+        result = cursor.fetchone()
+    db_connection.commit()
+    db_connection.close()
+    return result
+
+
+def db_update_user_role(user_id, role_id):
+    db_connection = get_db_connection()
+    query = QUERIES['update_user_role']
+    with db_connection.cursor() as cursor:
+        cursor.execute(query, (role_id, user_id))
+        result = cursor.fetchone()
+    db_connection.commit()
+    db_connection.close()
+    return result
+
+
+def db_update_user_department(user_id, department_id):
+    db_connection = get_db_connection()
+    query = QUERIES['update_user_department']
+    with db_connection.cursor() as cursor:
+        cursor.execute(query, (department_id, user_id))
+        result = cursor.fetchone()
+    db_connection.commit()
+    db_connection.close()
+    return result
+
+
+def db_get_role_id_by_name(role_name):
+    db_connection = get_db_connection()
+    query = QUERIES['get_role_id_by_name']
+    with db_connection.cursor() as cursor:
+        cursor.execute(query, (role_name,))
+        result = cursor.fetchone()
+    db_connection.close()
+    return result
+
+
+def db_get_department_id_by_name(department_name):
+    db_connection = get_db_connection()
+    query = QUERIES['get_department_id_by_name']
+    with db_connection.cursor() as cursor:
+        cursor.execute(query, (department_name,))
+        result = cursor.fetchone()
+    db_connection.close()
+    return result
+
+
+def db_is_user_available_to_change_role(user_id):
+    db_connection = get_db_connection()
+    query = QUERIES['is_user_available_to_change_role']
+    with db_connection.cursor() as cursor:
+        cursor.execute(query, (user_id, ))
+        result = cursor.fetchone()
+    db_connection.close()
+    return result
