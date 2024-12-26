@@ -181,6 +181,28 @@ WHERE
     AND assignor_status_id <> 3;
 """
 
+GET_USERS_TO_ADD_TASK = """
+SELECT 
+    u.user_id, 
+    u.first_name, 
+    u.last_name, 
+    d.department_name
+FROM
+    public.users u
+INNER JOIN 
+    public.department d ON u.department_id = d.department_id
+WHERE 
+    u.role_id <> 1 AND u.role_id <> 2 AND u.is_active = TRUE 
+ORDER BY u.user_id ASC;
+"""
+
+INSERT_NEW_TASK = """
+INSERT INTO public.task
+(task_name, description, assigned_to_user_id, due_date, execution_status_id, created_by_user_id, priority_id, task_type_id, assignor_status_id)
+VALUES(%s, %s, %s, %s, 1, %s, %s, %s, 1)
+RETURNING task_name;
+"""
+
 QUERIES = {
     'register': REGISTER_USER,
     'login': LOGIN_USER,
@@ -204,4 +226,6 @@ QUERIES = {
     'get_role_id_by_name': GET_ROLE_ID_BY_NAME,
     'get_department_id_by_name': GET_DEPARTMENT_ID_BY_NAME,
     "is_user_available_to_change_role": IS_USER_AVAILABLE_TO_CHANGE_ROLE,
+    'get_users_to_add_task': GET_USERS_TO_ADD_TASK,
+    'insert_new_task': INSERT_NEW_TASK
 }

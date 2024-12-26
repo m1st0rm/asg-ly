@@ -229,3 +229,24 @@ def db_is_user_available_to_change_role(user_id):
         result = cursor.fetchone()
     db_connection.close()
     return result
+
+
+def db_get_users_to_add_task():
+    db_connection = get_db_connection()
+    query = QUERIES['get_users_to_add_task']
+    with db_connection.cursor() as cursor:
+        cursor.execute(query)
+        result = cursor.fetchall()
+    db_connection.close()
+    return result
+
+
+def db_insert_new_task(task_name, description, assigned_to_user_id, due_date, created_by_user_id, priority_id, task_type_id):
+    db_connection = get_db_connection()
+    query = QUERIES['insert_new_task']
+    with db_connection.cursor() as cursor:
+        cursor.execute(query, (task_name, description, assigned_to_user_id, due_date, created_by_user_id, priority_id, task_type_id))
+        result = cursor.fetchone()
+    db_connection.commit()
+    db_connection.close()
+    return result
