@@ -264,13 +264,56 @@ INNER JOIN
 INNER JOIN 
     public.department d ON u.department_id = d.department_id
 WHERE 
-    t.task_id = %s;
+    t.task_id = %s
+ORDER BY t.created_at DESC;
 """
 
 INSERT_COMMENTARY_FOR_TASK = """
     INSERT INTO public.taskcomment (task_id, user_id, content)
     VALUES (%s, %s, %s)
     RETURNING content;
+"""
+
+GET_EXECUTOR_TASKS = """
+SELECT 
+    t.task_id, 
+    t.task_name, 
+    t.description, 
+    t.due_date, 
+    t.created_at, 
+    t.updated_at, 
+    u.user_id, 
+    u.first_name, 
+    u.last_name, 
+    t2.priority_name, 
+    t3.task_type_name, 
+    es.execution_status_name, 
+    as2.assignor_status_name 
+FROM 
+    public.task t
+INNER JOIN 
+    public.users u ON t.created_by_user_id = u.user_id
+INNER JOIN 
+    public.taskpriority t2 ON t.priority_id = t2.priority_id
+INNER JOIN 
+    public.tasktype t3 ON t.task_type_id = t3.task_type_id
+INNER JOIN 
+    public.execution_status es ON t.execution_status_id = es.execution_status_id
+INNER JOIN 
+    public.assignor_status as2 ON t.assignor_status_id = as2.assignor_status_id
+WHERE 
+    t.assigned_to_user_id = %s
+ORDER BY t.task_id DESC;
+"""
+
+UPDATE_EXECUTOR_TASK_STATUS = """
+UPDATE public.task
+SET 
+    execution_status_id = %s,
+    updated_at = CURRENT_TIMESTAMP
+WHERE 
+    task_id = %s
+RETURNING execution_status_id;
 """
 
 QUERIES = {
@@ -302,4 +345,6 @@ QUERIES = {
     'update_manager_task_status': UPDATE_MANAGER_TASK_STATUS,
     'get_commentaries_for_task': GET_COMMENTARIES_FOR_TASK,
     'insert_commentary_for_task': INSERT_COMMENTARY_FOR_TASK,
+    'get_executor_tasks': GET_EXECUTOR_TASKS,
+    'update_executor_task_status': UPDATE_EXECUTOR_TASK_STATUS,
 }
