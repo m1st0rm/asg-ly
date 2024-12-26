@@ -4,6 +4,7 @@ from tkinter import font
 from tkinter import messagebox
 from backend.tasks_manager import get_manager_tasks, update_task_manager_status
 from frontend.helpers import is_positive_integer
+from frontend.comments_window import open_comments_window
 
 
 ALLOWED_TASKS = []
@@ -47,6 +48,18 @@ def press_task_change_button(user_id, task_change_id_entry, task_change_status_c
 
     messagebox.showinfo('Успех', 'Статус задачи со стороны координатора успешно обновлён!')
     update_table_method()
+
+
+def press_task_comments_button(root, user_id, task_comments_id_entry):
+    if not is_positive_integer(task_comments_id_entry.get()):
+        messagebox.showerror("Ошибка", "Неверный формат номера задачи.")
+        return
+    if int(task_comments_id_entry.get()) not in ALLOWED_TASKS:
+        messagebox.showerror("Ошибка", "Задачи с указанным номером не существует или вы не можете писать к ней комментарии.")
+        return
+
+    task_id = int(task_comments_id_entry.get())
+    open_comments_window(root, user_id, task_id)
 
 
 def open_tasks_for_manager_window(root, user_id):
@@ -120,7 +133,7 @@ def open_tasks_for_manager_window(root, user_id):
     task_comments_id_entry.pack(fill=tk.X, pady=5, padx=10)
 
     task_comments_button = tk.Button(tasks_window, text='Открыть комментарии к задаче', font=button_font,
-                                     command=lambda: 1, state=tk.DISABLED)
+                                     command=lambda: press_task_comments_button(tasks_window, user_id, task_comments_id_entry), state=tk.DISABLED)
     task_comments_button.pack(fill=tk.X, pady=5, padx=10)
 
     task_change_id_entry.bind('<KeyRelease>', lambda e: set_task_change_button_state(task_change_id_entry, task_change_status_combobox, task_change_button))

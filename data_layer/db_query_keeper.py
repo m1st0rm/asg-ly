@@ -245,6 +245,34 @@ WHERE
 RETURNING assignor_status_id;
 """
 
+GET_COMMENTARIES_FOR_TASK = """
+    SELECT 
+    t.comment_id, 
+    t.content, 
+    t.created_at, 
+    u.user_id, 
+    u.first_name, 
+    u.last_name, 
+    r.role_name, 
+    d.department_name
+FROM 
+    public.taskcomment t
+INNER JOIN 
+    public.users u ON t.user_id = u.user_id
+INNER JOIN 
+    public.role r ON u.role_id = r.role_id
+INNER JOIN 
+    public.department d ON u.department_id = d.department_id
+WHERE 
+    t.task_id = %s;
+"""
+
+INSERT_COMMENTARY_FOR_TASK = """
+    INSERT INTO public.taskcomment (task_id, user_id, content)
+    VALUES (%s, %s, %s)
+    RETURNING content;
+"""
+
 QUERIES = {
     'register': REGISTER_USER,
     'login': LOGIN_USER,
@@ -272,4 +300,6 @@ QUERIES = {
     'insert_new_task': INSERT_NEW_TASK,
     'get_manager_tasks': GET_MANAGER_TASKS,
     'update_manager_task_status': UPDATE_MANAGER_TASK_STATUS,
+    'get_commentaries_for_task': GET_COMMENTARIES_FOR_TASK,
+    'insert_commentary_for_task': INSERT_COMMENTARY_FOR_TASK,
 }

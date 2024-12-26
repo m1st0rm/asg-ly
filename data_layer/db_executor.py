@@ -271,3 +271,24 @@ def db_update_manager_task_status(task_id, assignor_status_id):
     db_connection.commit()
     db_connection.close()
     return result
+
+
+def db_get_commentaries_for_task(task_id):
+    db_connection = get_db_connection()
+    query = QUERIES['get_commentaries_for_task']
+    with db_connection.cursor() as cursor:
+        cursor.execute(query, (task_id,))
+        result = cursor.fetchall()
+    db_connection.close()
+    return result
+
+
+def db_insert_commentary_for_task(task_id, user_id, content):
+    db_connection = get_db_connection()
+    query = QUERIES['insert_commentary_for_task']
+    with db_connection.cursor() as cursor:
+        cursor.execute(query, (task_id, user_id, content))
+        result = cursor.fetchone()
+    db_connection.commit()
+    db_connection.close()
+    return result
