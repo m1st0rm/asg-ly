@@ -3,6 +3,7 @@ from tkinter import ttk
 from tkinter import font
 from frontend.personal_info_window import open_personal_info_window
 from frontend.add_task_window import open_add_task_window
+from frontend.tasks_for_manager_window import open_tasks_for_manager_window
 
 
 def open_manager_window(root, user_id):
@@ -33,7 +34,7 @@ def open_manager_window(root, user_id):
     separator3 = ttk.Separator(manager_window, orient="horizontal")
     separator3.pack(fill=tk.X)
 
-    manage_taks_button = tk.Button(manager_window, text='Управление поручениями', font=button_font, state=tk.NORMAL)
+    manage_taks_button = tk.Button(manager_window, text='Управление поручениями', font=button_font, state=tk.NORMAL, command=lambda: open_tasks_for_manager_window(manager_window, user_id))
     manage_taks_button.pack(fill=tk.X, pady=20, padx=10)
 
 

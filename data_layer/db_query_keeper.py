@@ -203,6 +203,48 @@ VALUES(%s, %s, %s, %s, 1, %s, %s, %s, 1)
 RETURNING task_name;
 """
 
+GET_MANAGER_TASKS = """
+SELECT 
+    t.task_id, 
+    t.task_name, 
+    t.description, 
+    t.due_date, 
+    t.created_at, 
+    t.updated_at, 
+    u.user_id, 
+    u.first_name, 
+    u.last_name, 
+    t2.priority_name, 
+    t3.task_type_name, 
+    es.execution_status_name, 
+    as2.assignor_status_name 
+FROM 
+    public.task t
+INNER JOIN 
+    public.users u ON t.assigned_to_user_id = u.user_id
+INNER JOIN 
+    public.taskpriority t2 ON t.priority_id = t2.priority_id
+INNER JOIN 
+    public.tasktype t3 ON t.task_type_id = t3.task_type_id
+INNER JOIN 
+    public.execution_status es ON t.execution_status_id = es.execution_status_id
+INNER JOIN 
+    public.assignor_status as2 ON t.assignor_status_id = as2.assignor_status_id
+WHERE 
+    t.created_by_user_id = %s
+ORDER BY t.task_id DESC;
+"""
+
+UPDATE_MANAGER_TASK_STATUS = """
+UPDATE public.task
+SET 
+    assignor_status_id = %s,
+    updated_at = CURRENT_TIMESTAMP
+WHERE 
+    task_id = %s
+RETURNING assignor_status_id;
+"""
+
 QUERIES = {
     'register': REGISTER_USER,
     'login': LOGIN_USER,
@@ -227,5 +269,7 @@ QUERIES = {
     'get_department_id_by_name': GET_DEPARTMENT_ID_BY_NAME,
     "is_user_available_to_change_role": IS_USER_AVAILABLE_TO_CHANGE_ROLE,
     'get_users_to_add_task': GET_USERS_TO_ADD_TASK,
-    'insert_new_task': INSERT_NEW_TASK
+    'insert_new_task': INSERT_NEW_TASK,
+    'get_manager_tasks': GET_MANAGER_TASKS,
+    'update_manager_task_status': UPDATE_MANAGER_TASK_STATUS,
 }

@@ -250,3 +250,24 @@ def db_insert_new_task(task_name, description, assigned_to_user_id, due_date, cr
     db_connection.commit()
     db_connection.close()
     return result
+
+
+def db_get_manager_tasks(coordinator_id):
+    db_connection = get_db_connection()
+    query = QUERIES['get_manager_tasks']
+    with db_connection.cursor() as cursor:
+        cursor.execute(query, (coordinator_id,))
+        result = cursor.fetchall()
+    db_connection.close()
+    return result
+
+
+def db_update_manager_task_status(task_id, assignor_status_id):
+    db_connection = get_db_connection()
+    query = QUERIES['update_manager_task_status']
+    with db_connection.cursor() as cursor:
+        cursor.execute(query, (assignor_status_id, task_id))
+        result = cursor.fetchone()
+    db_connection.commit()
+    db_connection.close()
+    return result
